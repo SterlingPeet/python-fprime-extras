@@ -2,6 +2,8 @@
 Overview
 ========
 
+WARNING:  This branch and release is just a template.  See the ``devel`` branch for preview code.
+
 .. start-badges
 
 .. list-table::
