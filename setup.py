@@ -10,9 +10,12 @@ from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import splitext
+import subprocess
 
 from setuptools import find_packages
 from setuptools import setup
+
+__version__ = '0.0.0'
 
 
 def read(*names, **kwargs):
@@ -22,10 +25,22 @@ def read(*names, **kwargs):
     ) as fh:
         return fh.read()
 
+def get_version():
+    version = __version__
+    try:
+        version = subprocess.check_output(["git", "describe", "--tags", "--always"]).decode("utf-8").strip()
+        branch = subprocess.check_output(["git", "branch", "--show-current"]).decode("utf-8").strip()
+        version = version + '-' + branch.replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
+        with open('src/fprime_extras/version.py', 'w') as f:
+            f.write('__version__ = \'{}\'\r\n__branch__ = \'{}\'\r\n'.format(version, branch))
+    except:
+        version = __version__
+    return version
+
 
 setup(
     name='fprime-extras',
-    version='0.0.0',
+    version=get_version(),
     license='MIT',
     description='Extra tools for working with F Prime projects.',
     long_description='%s\n%s' % (
@@ -42,14 +57,13 @@ setup(
     zip_safe=False,
     classifiers=[
         # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: Unix',
         'Operating System :: POSIX',
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
@@ -57,10 +71,6 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
-        # uncomment if you test on these interpreters:
-        # 'Programming Language :: Python :: Implementation :: IronPython',
-        # 'Programming Language :: Python :: Implementation :: Jython',
-        # 'Programming Language :: Python :: Implementation :: Stackless',
         'Topic :: Utilities',
     ],
     project_urls={
@@ -71,9 +81,10 @@ setup(
     keywords=[
         # eg: 'keyword1', 'keyword2', 'keyword3',
     ],
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
+    python_requires='>=3.5',
     install_requires=[
-        # eg: 'aspectlib==1.1.1', 'six>=1.7',
+        'appdirs',
+        'requests',
     ],
     extras_require={
         # eg:
