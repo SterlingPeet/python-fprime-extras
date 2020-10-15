@@ -1,5 +1,6 @@
 from os import linesep
 from os import sep
+from os import path
 from os.path import abspath
 from os.path import join as join_dir
 
@@ -9,6 +10,7 @@ class ExtrasFile(object):
         super(ExtrasFile, self).__init__()
         self.filename = filename
         self.full_filename = abspath(filename)
+        self.backup_filename = sep.join([path.dirname(self.full_filename), '.{}.{}'.format(path.basename(self.full_filename), '0.bak')])
         self._loaded = False
         self._orig_contents = None
         self._orig_contents_lines = None
@@ -54,7 +56,8 @@ class ExtrasFile(object):
 
     def _write_backup(self):
         if not self._backup_flag:
-            with open('.{}.{}'.format(self.filename, '0.bak'), 'wb') as f:
+            # print(self.backup_filename)
+            with open(self.backup_filename, 'wb') as f:
                 f.write(self._orig_contents)
                 self._backup_flag = True
 
