@@ -27,9 +27,13 @@ def read(*names, **kwargs):
 
 def get_version():
     version = __version__
+    branch = None
     try:
         version = subprocess.check_output(["git", "describe", "--tags", "--always"]).decode("utf-8").strip()
-        branch = subprocess.check_output(["git", "branch", "--show-current"]).decode("utf-8").strip()
+        try:
+            branch = subprocess.check_output(["git", "branch", "--show-current"]).decode("utf-8").strip()
+        except:
+            branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode("utf-8").strip()
         version = version + '-' + branch.replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
         with open('src/fprime_extras/version.py', 'w') as f:
             f.write('__version__ = \'{}\'\r\n__branch__ = \'{}\'\r\n'.format(version, branch))
