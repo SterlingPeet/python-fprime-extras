@@ -1,4 +1,5 @@
 from ..core.file import ExtrasFile
+from lxml import etree
 
 def normalize(filename):
     xml_file = ExtrasFile(filename)
