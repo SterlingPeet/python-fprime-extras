@@ -8,7 +8,7 @@ import os
 
 from .xml import normalize
 from ..core.file import ExtrasFile
-
+from .rules import RuleListFactory
 
 parser = argparse.ArgumentParser(description='The missing linter for F Prime projects.')
 
@@ -32,6 +32,9 @@ def lint_main(args=None, parser=None):
         args = parser
     else:
         args = parser.parse_args(args=args)
+
+    all_rules = RuleListFactory().rules()
+    print("Rules collected: {}".format(len(all_rules)))
 
     if args.normalize:
         normalize(args.base_file)
