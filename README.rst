@@ -21,15 +21,15 @@ WARNING:  This branch and release is just a template.  See the ``devel`` branch 
     :target: https://readthedocs.org/projects/python-fprime-extras
     :alt: Documentation Status
 
-.. |travis| image:: https://api.travis-ci.org/SterlingPeet/python-fprime-extras.svg?branch=master
+.. |travis| image:: https://api.travis-ci.org/SterlingPeet/python-fprime-extras.svg?branch=main
     :alt: Travis-CI Build Status
     :target: https://travis-ci.org/SterlingPeet/python-fprime-extras
 
-.. |requires| image:: https://requires.io/github/SterlingPeet/python-fprime-extras/requirements.svg?branch=master
+.. |requires| image:: https://requires.io/github/SterlingPeet/python-fprime-extras/requirements.svg?branch=main
     :alt: Requirements Status
-    :target: https://requires.io/github/SterlingPeet/python-fprime-extras/requirements/?branch=master
+    :target: https://requires.io/github/SterlingPeet/python-fprime-extras/requirements/?branch=main
 
-.. |codecov| image:: https://codecov.io/gh/SterlingPeet/python-fprime-extras/branch/master/graphs/badge.svg?branch=master
+.. |codecov| image:: https://codecov.io/gh/SterlingPeet/python-fprime-extras/branch/main/graphs/badge.svg?branch=main
     :alt: Coverage Status
     :target: https://codecov.io/github/SterlingPeet/python-fprime-extras
 
@@ -51,7 +51,7 @@ WARNING:  This branch and release is just a template.  See the ``devel`` branch 
 
 .. |commits-since| image:: https://img.shields.io/github/commits-since/SterlingPeet/python-fprime-extras/v0.0.0.svg
     :alt: Commits since latest release
-    :target: https://github.com/SterlingPeet/python-fprime-extras/compare/v0.0.0...master
+    :target: https://github.com/SterlingPeet/python-fprime-extras/compare/v0.0.0...main
 
 
 
@@ -70,7 +70,7 @@ Installation
 
 You can also install the in-development version with::
 
-    pip install https://github.com/SterlingPeet/python-fprime-extras/archive/master.zip
+    pip install https://github.com/SterlingPeet/python-fprime-extras/archive/main.zip
 
 
 Documentation
