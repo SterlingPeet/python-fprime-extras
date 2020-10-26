@@ -23,6 +23,8 @@ from . import __version__
 from . import __branch__
 from .devupdate import nag
 from .core.file import ExtrasFile
+from .docs.cli import build_parser as build_docs_parser
+from .docs.cli import docs_main
 from .lint.cli import build_parser as build_lint_parser
 from .lint.cli import lint_main
 
@@ -54,6 +56,8 @@ subparsers = parser.add_subparsers(title='Extras Command List')
 docs_parser = subparsers.add_parser('docs', help='Documentation file template generator and updater')
 impl_parser = subparsers.add_parser('impl', help='Implementation file template generator and updater')
 lint_parser = subparsers.add_parser('lint', help='Lint checker for F Prime format and structure')
+build_docs_parser(docs_parser)
+docs_parser.set_defaults(func=docs_main)
 build_lint_parser(lint_parser)
 lint_parser.set_defaults(func=lint_main)
 
