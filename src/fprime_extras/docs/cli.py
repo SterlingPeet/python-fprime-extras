@@ -95,20 +95,17 @@ def docs_main(args=None, parser=None):
         }
         cmd_list = []
         for command in commands:
-            # print(command)
             cmd_dict = {}
-            for key in cmd_keys:
-                cmd_dict[key] = command.get(key)
-                if cmd_dict[key] is None:
-                    for child in command:
-                        # print(child.tag)
-                        # print(key)
-                        # print(child.text.strip())
-                        if child.tag == key:
-                            cmd_dict[key] = child.text.strip()
-                if key == 'opcode':
-                    cmd_dict[key] = '{val} (0x{val:X})'.format(val = int(command.get(key)))
-            cmd_list.append(cmd_dict)
+            if command.tag == 'command':
+                for key in cmd_keys:
+                    cmd_dict[key] = command.get(key)
+                    if cmd_dict[key] is None:
+                        for child in command:
+                            if child.tag == key:
+                                cmd_dict[key] = child.text.strip()
+                    if key == 'opcode':
+                        cmd_dict[key] = '{val} (0x{val:X})'.format(val = int(command.get(key)))
+                cmd_list.append(cmd_dict)
 
         print('\r\n\r\n## Command List\r\n')
         delimiter = '|'
@@ -133,15 +130,16 @@ def docs_main(args=None, parser=None):
         channel_list = []
         for channel in telemetry:
             chan_dict = {}
-            for key in channel_keys:
-                chan_dict[key] = channel.get(key)
-                if chan_dict[key] is None:
-                    for child in channel:
-                        if child.tag == key:
-                            chan_dict[key] = child.text.strip()
-                if key == 'id':
-                    chan_dict[key] = '{val} (0x{val:X})'.format(val = int(channel.get(key)))
-            channel_list.append(chan_dict)
+            if channel.tag == 'channel':
+                for key in channel_keys:
+                    chan_dict[key] = channel.get(key)
+                    if chan_dict[key] is None:
+                        for child in channel:
+                            if child.tag == key:
+                                chan_dict[key] = child.text.strip()
+                    if key == 'id':
+                        chan_dict[key] = '{val} (0x{val:X})'.format(val = int(channel.get(key)))
+                channel_list.append(chan_dict)
 
         print('\r\n## Telemetry Channel List\r\n')
         delimiter = '|'
@@ -168,20 +166,17 @@ def docs_main(args=None, parser=None):
         }
         event_list = []
         for event in events:
-            # print(command)
             event_dict = {}
-            for key in event_keys:
-                event_dict[key] = event.get(key)
-                if event_dict[key] is None:
-                    for child in event:
-                        # print(child.tag)
-                        # print(key)
-                        # print(child.text.strip())
-                        if child.tag == key:
-                            event_dict[key] = child.text.strip()
-                if key == 'id':
-                    event_dict[key] = '{val} (0x{val:X})'.format(val = int(event.get(key)))
-            event_list.append(event_dict)
+            if event.tag == 'event':
+                for key in event_keys:
+                    event_dict[key] = event.get(key)
+                    if event_dict[key] is None:
+                        for child in event:
+                            if child.tag == key:
+                                event_dict[key] = child.text.strip()
+                    if key == 'id':
+                        event_dict[key] = '{val} (0x{val:X})'.format(val = int(event.get(key)))
+                event_list.append(event_dict)
 
         print('\r\n## Event List\r\n')
         delimiter = '|'
@@ -197,7 +192,6 @@ def docs_main(args=None, parser=None):
 
     print('\r\n\r\nPort Table for docs/sdd.md:')
 
-    print('\r\nHere is the contents of the docs/{}.md file:'.format(comp_root.get('name')))
     # Lets build the command list
     if ports is not None:
         port_keys = ['data_type', 'name', 'direction', 'kind', 'comment']
@@ -211,23 +205,23 @@ def docs_main(args=None, parser=None):
         port_list = []
         for port in ports:
             port_dict = {}
-            for key in port_keys:
-                port_dict[key] = port.get(key)
-                if port_dict[key] is None:
-                    for child in port:
-                        if child.tag == key:
-                            port_dict[key] = child.text.strip()
-                if key == 'kind':
-                    if port.get(key)[-4] == 't':
-                        port_dict['direction'] = 'Output'
-                        port_dict['kind'] = 'Output'
-                    else:
-                        port_dict['direction'] = 'Input'
-                        port_dict['kind'] = port.get(key)[0:-6].capitalize()
-                if key == 'data_type':
-                    port_dict['data_type'] = '[`{}`]()'.format(port.get(key))
-
-            port_list.append(port_dict)
+            if port.tag == 'port':
+                for key in port_keys:
+                    port_dict[key] = port.get(key)
+                    if port_dict[key] is None:
+                        for child in port:
+                            if child.tag == key:
+                                port_dict[key] = child.text.strip()
+                    if key == 'kind':
+                        if port.get(key)[-4] == 't':
+                            port_dict['direction'] = 'Output'
+                            port_dict['kind'] = 'Output'
+                        else:
+                            port_dict['direction'] = 'Input'
+                            port_dict['kind'] = port.get(key)[0:-6].capitalize()
+                    if key == 'data_type':
+                        port_dict['data_type'] = '[`{}`]()'.format(port.get(key))
+                port_list.append(port_dict)
 
         print('\r\n\r\n## Port List\r\n')
         delimiter = '|'
