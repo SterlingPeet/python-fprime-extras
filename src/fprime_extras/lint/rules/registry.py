@@ -23,10 +23,10 @@ class RuleListFactory:
             if wrapped_class in cls.registry:
                 print("This rule: {} already registered.".format(wrapped_class.__name__))
             cls.registry.append(wrapped_class)
-            print("Registered {}.".format(wrapped_class.__name__))
-            print("Length of registry: {}".format(len(cls.registry)))
-            if wrapped_class in cls.registry:
-                print("This rule successfully registered.")
+            # print("Registered {}.".format(wrapped_class.__name__))
+            # print("Length of registry: {}".format(len(cls.registry)))
+            # if wrapped_class in cls.registry:
+            #     print("This rule successfully registered.")
             return wrapped_class
 
         return inner_wrapper
