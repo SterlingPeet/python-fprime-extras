@@ -68,4 +68,3 @@ def nag(version, branch):
         print('*** please double check that you have the latest version of')
         print('*** fprime-extras installed.')
         print('***')
-        raise e
