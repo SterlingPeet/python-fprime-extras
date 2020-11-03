@@ -33,7 +33,7 @@ def build_common_parser(parser):
     """Set the common options for all callable cli entry points in
     fprime_extras.
     """
-    parser.add_argument('-v', '--verbose', action='count',
+    parser.add_argument('-v', '--verbose', action='count', default=0,
                         help='Print more output given more "v"')
     parser.add_argument(
         '--version', action='version',
@@ -64,6 +64,9 @@ lint_parser.set_defaults(func=lint_main)
 
 def main(args=None):
     args = parser.parse_args(args=args)
-    nag(__version__, __branch__)
     args.func(parser=args)
-    nag(__version__, __branch__)
+    try:
+        nag(__version__, __branch__)
+    except Exception as e:
+        if args.verbose > 0:
+            raise e
