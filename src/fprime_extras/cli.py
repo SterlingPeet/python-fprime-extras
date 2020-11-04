@@ -21,7 +21,7 @@ import textwrap
 from . import __date__
 from . import __version__
 from . import __branch__
-from .devupdate import nag
+from .devupdate import nag, version_cache_file
 from .core.file import ExtrasFile
 from .docs.cli import build_parser as build_docs_parser
 from .docs.cli import docs_main
@@ -39,6 +39,10 @@ def build_common_parser(parser):
         '--version', action='version',
         version='%(prog)s {version}, ({date})'.format(version=__version__,
                                                       date=__date__))
+    parser.add_argument('--print-cache-file', action='store_true',
+                        help='Print the path and name of the dev cache file')
+    parser.add_argument('--print-cache-file-contents', action='store_true',
+                        help='Print the contents of the version cache file')
 
 parser = argparse.ArgumentParser(
     description=textwrap.dedent('''\
@@ -64,7 +68,20 @@ lint_parser.set_defaults(func=lint_main)
 
 def main(args=None):
     args = parser.parse_args(args=args)
-    args.func(parser=args)
+
+    if args.print_cache_file:
+        print('Version Check Cache File: {}'.format(version_cache_file))
+
+    if args.print_cache_file_contents:
+        print('Version Check Cache File Contents:')
+        with open(version_cache_file, 'r') as f:
+            print(f.read())
+
+    if hasattr(args, 'func'):
+        args.func(parser=args)
+    else:
+        print('No Sub-command was invoked, doing nothing.')
+
     try:
         nag(__version__, __branch__)
     except Exception as e:

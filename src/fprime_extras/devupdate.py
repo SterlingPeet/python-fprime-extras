@@ -8,12 +8,12 @@ import os
 repository = 'https://api.github.com/repos/SterlingPeet/python-fprime-extras'
 params = 'Accept: application/vnd.github.v3+json'
 cache_dir = AppDirs('fprime-extras', 'SterlingPeet').user_cache_dir
+version_cache_file = cache_dir + os.sep + 'version.json'
 
 def get_github_version(repository=repository, params=params, branch='main'):
     """Get the SHA of the latest commit in the specified branch on GH."""
     cache_expired = False
     gh_sha = None
-    version_cache_file = cache_dir + os.sep + 'version.json'
     # print('version cache file: {}'.format(version_cache_file))
     try:
         with open(version_cache_file, 'r') as cache:
@@ -30,11 +30,15 @@ def get_github_version(repository=repository, params=params, branch='main'):
         cache_expired = True
 
     if cache_expired:
-        # print(" ** ** Updating the Cache File")
+        version_dict = {'timestamp': datetime.now().isoformat()}
         resp = requests.get(url='{}/branches/{}'.format(repository, branch), params=params)
-        gh_sha = resp.json()['commit']['sha']
-        version_dict = {'sha': gh_sha,
-                        'timestamp': datetime.now().isoformat()}
+        try:
+            gh_sha = resp.json()['commit']['sha']
+            version_dict['sha'] = gh_sha
+            version_dict['status'] = 'Check Successful'
+        except:
+            version_dict['sha'] = gh_sha
+            version_dict['status'] = 'Bad HTTP Response: {}'.format(str(resp))
         # print(version_dict)
         if not os.path.exists(cache_dir):
             os.makedirs(cache_dir)
@@ -45,8 +49,12 @@ def get_github_version(repository=repository, params=params, branch='main'):
 def check_version(sha, branch='main'):
     """Return False if the given SHA matches the latest commit on GH."""
     gh_sha = get_github_version(branch=branch)
-    # print(gh_sha)
-    # print(gh_sha[0:len(sha)])
+    if gh_sha is None:
+        print('***')
+        print('*** The git branch of your installation may not exist in the')
+        print('*** upstream repository, or your internet connection may have')
+        print('*** been down at the last check.')
+        # return False
     return sha != gh_sha[0:len(sha)]
 
 def nag(version, branch):
