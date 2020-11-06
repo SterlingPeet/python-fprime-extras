@@ -2,6 +2,7 @@ import argparse
 from os.path import splitext
 
 from ..docs import generate
+from ..docs import TopologyGrapher
 
 
 parser = argparse.ArgumentParser(description='The missing docs generator for F Prime projects.')
@@ -15,8 +16,10 @@ def build_parser(parser):
                         help='File to use for docs source')
     parser.add_argument('fprime_root', type=str, nargs='?',
                          help='FPrime root directory for topology parsing')
-    parser.add_argument('-o', '--output',
+    parser.add_argument('-o', '--output', dest="output",
                         help='Documentation file to generate')
+    parser.add_argument('-g', '--graph', action='store_true',
+                        help='Graph a topology file')
     # TODO: add argument for fprime root location, for topology parsing
 
 def docs_main(args=None, parser=None):
@@ -28,6 +31,7 @@ def docs_main(args=None, parser=None):
     invalid_flag = False
     filename, file_extension = splitext(args.base_file)
     ai_file_type = None
+    output_file = "graphviz.txt"
     if file_extension != '.xml':
         print('This version only works with XML input files.')
         invalid_flag = True
@@ -38,13 +42,18 @@ def docs_main(args=None, parser=None):
         ai_file_type = "Component"
     elif filename[-13:-2] == "TopologyApp":
         ai_file_type = "TopologyApp"
-        if args.fprime_root is None:
+        if args.graph is None and args.fprime_root is None:
             print("Topology parsing requires fprime root directory argument")
             invalid_flag = True
     else:
         print(filename)
-        print('This version can only handle Components.')
+        print('This version can only handle Component and Topology files.')
         invalid_flag = True
+    if args.graph is not None and ai_file_type != "TopologyApp":
+        print("Graphing is only supported for topology files")
+        invalid_flag = True
+    if args.output is not None:
+        output_file = args.output
 
     if invalid_flag:
         exit(-1)
@@ -57,5 +66,7 @@ def docs_main(args=None, parser=None):
     print(ai_file_type)
     if ai_file_type == "Component":
         generate.generate_component_documentation(args.base_file)
-    elif ai_file_type == "TopologyApp":
+    elif ai_file_type == "TopologyApp" and not args.graph:
         generate.generate_topology_documentation(args.base_file, args.fprime_root)
+    elif ai_file_type == "TopologyApp" and args.graph:
+        TopologyGrapher.make_graph(args.base_file, output_file)
