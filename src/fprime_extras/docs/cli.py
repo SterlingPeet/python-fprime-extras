@@ -22,6 +22,7 @@ def build_parser(parser):
                         help='Graph a topology file')
     # TODO: add argument for fprime root location, for topology parsing
 
+
 def docs_main(args=None, parser=None):
     if args is None and parser is not None:
         args = parser
@@ -42,14 +43,14 @@ def docs_main(args=None, parser=None):
         ai_file_type = "Component"
     elif filename[-13:-2] == "TopologyApp":
         ai_file_type = "TopologyApp"
-        if args.graph is None and args.fprime_root is None:
+        if not args.graph and (args.fprime_root is None or len(args.fprime_root) < 1):
             print("Topology parsing requires fprime root directory argument")
             invalid_flag = True
     else:
         print(filename)
         print('This version can only handle Component and Topology files.')
         invalid_flag = True
-    if args.graph is not None and ai_file_type != "TopologyApp":
+    if args.graph and ai_file_type != "TopologyApp":
         print("Graphing is only supported for topology files")
         invalid_flag = True
     if args.output is not None:
