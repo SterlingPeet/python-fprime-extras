@@ -3,7 +3,7 @@ import pkgutil
 
 import sys
 
-from .registry import RuleListFactory
+from .registry import RuleListFactory  # noqa: F401
 
 _current_module = sys.modules[__name__]
 
@@ -14,6 +14,7 @@ def _iter_namespace(ns_pkg):
     # import_module to work without having to do additional modification to
     # the name.
     return pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + ".")
+
 
 discovered_rule_modules = {
     name: importlib.import_module(name)

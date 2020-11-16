@@ -25,19 +25,26 @@ def read(*names, **kwargs):
     ) as fh:
         return fh.read()
 
+
 def get_version():
     version = __version__
     branch = None
     try:
-        version = subprocess.check_output(["git", "describe", "--tags", "--always"]).decode("utf-8").strip()
+        version = subprocess.check_output(
+            ["git", "describe", "--tags", "--always"]).decode("utf-8").strip()
         try:
-            branch = subprocess.check_output(["git", "branch", "--show-current"]).decode("utf-8").strip()
-        except:
-            branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode("utf-8").strip()
-        version = version + '-' + branch.replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
+            branch = subprocess.check_output(
+                ["git", "branch", "--show-current"]).decode("utf-8").strip()
+        except Exception:
+            branch = subprocess.check_output(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode("utf-8").strip()
+        version = version + '-' + \
+            branch.replace(' ', '_').replace(
+                '/', '_').replace('\\', '_').replace('-', '_')
         with open('src/fprime_extras/version.py', 'w') as f:
-            f.write('__version__ = \'{}\'\r\n__branch__ = \'{}\'\r\n'.format(version, branch))
-    except:
+            f.write('__version__ = \'{}\'\r\n__branch__ = \'{}\'\r\n'.format(
+                version, branch))
+    except Exception:
         version = __version__
     return version
 
@@ -48,7 +55,8 @@ setup(
     license='MIT',
     description='Extra tools for working with F Prime projects.',
     long_description='%s\n%s' % (
-        re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
+        re.compile('^.. start-badges.*^.. end-badges',
+                   re.M | re.S).sub('', read('README.rst')),
         re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))
     ),
     author='Sterling Lewis Peet',

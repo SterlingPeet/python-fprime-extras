@@ -2,7 +2,6 @@ import argparse
 import lxml.etree as etree
 from lxml.etree import DocumentInvalid
 from lxml.etree import XMLSyntaxError
-from lxml.isoschematron import Schematron
 from os.path import splitext
 import os
 
@@ -10,7 +9,9 @@ from .xml import normalize
 from ..core.file import ExtrasFile
 from .rules import RuleListFactory
 
-parser = argparse.ArgumentParser(description='The missing linter for F Prime projects.')
+parser = argparse.ArgumentParser(
+    description='The missing linter for F Prime projects.')
+
 
 def build_parser(parser):
     """Builds the parser for the linter cli.  Formulating this as a
@@ -65,7 +66,7 @@ def lint_main(args=None, parser=None):
                         if pi.get('RNGSchema'):
                             print('** WARNING: Outdated Schema definition style!')
                             schema_pi = pi
-                    except:
+                    except Exception:
                         pass
 
             rng_filename = None
@@ -74,9 +75,11 @@ def lint_main(args=None, parser=None):
                 print('** WARNING: No Schema PI detected!')
             elif schema_pi.target == 'xml-model':
                 print('RNG Schema type: {}'.format(schema_pi.get('type')))
-                print('RNG Namespace: {}'.format(schema_pi.get('schematypens')))
+                print('RNG Namespace: {}'.format(
+                    schema_pi.get('schematypens')))
                 print('RNG Validation File: {}'.format(schema_pi.get('href')))
-                rng_filename = xml_file.resolve_relative_path(schema_pi.get('href'))
+                rng_filename = xml_file.resolve_relative_path(
+                    schema_pi.get('href'))
                 print('RNG File Resolved: {}'.format(rng_filename))
                 if os.path.exists(rng_filename):
                     print('File Exists!')
@@ -85,8 +88,10 @@ def lint_main(args=None, parser=None):
                     print('Path is invalid...')
             elif schema_pi.target == 'oxygen':
                 print('RNG Schema type: {}'.format(schema_pi.get('type')))
-                print('RNG Validation File: {}'.format(schema_pi.get('RNGSchema')))
-                rng_filename = xml_file.resolve_relative_path(schema_pi.get('RNGSchema')[5:])
+                print('RNG Validation File: {}'.format(
+                    schema_pi.get('RNGSchema')))
+                rng_filename = xml_file.resolve_relative_path(
+                    schema_pi.get('RNGSchema')[5:])
                 print('RNG File Resolved: {}'.format(rng_filename))
                 if os.path.exists(rng_filename):
                     print('File Exists!')
@@ -113,7 +118,6 @@ def lint_main(args=None, parser=None):
                 #     log = schematron.error_log
                 #     print(log)
 
-
             if xml_tree.getroot().tag == 'assembly':
                 print('This is a topology file.')
 
@@ -131,15 +135,17 @@ def lint_main(args=None, parser=None):
                 # Make lists of tags
                 tag_lists_dict = {}
                 for child in top_root:
-                    if not child.tag in tag_lists_dict:
+                    if child.tag not in tag_lists_dict:
                         tag_lists_dict[child.tag] = []
                     tag_lists_dict[child.tag].append(child)
 
                 for key in tag_lists_dict:
-                    print('Found {} {} elements.'.format(len(tag_lists_dict[key]), key))
+                    print('Found {} {} elements.'.format(
+                        len(tag_lists_dict[key]), key))
 
                 # Pre-compute list of instance names for checking against
-                instance_names = [i.get('name') for i in tag_lists_dict['instance']]
+                instance_names = [i.get('name')
+                                  for i in tag_lists_dict['instance']]
                 print('\nFinding connections.')
                 for conn in tag_lists_dict['connection']:
                     conn_name = conn.get('name')
@@ -153,11 +159,13 @@ def lint_main(args=None, parser=None):
                             target = comp.get('component')
                     # print('Found connection "{}" from "{}" to "{}"'.format(conn_name, source, target))
                     if source not in instance_names:
-                        print('Connection "{}"" contains non-existent source "{}"'.format(conn_name, source))
+                        print(
+                            'Connection "{}"" contains non-existent source "{}"'.format(conn_name, source))
                         flag = True
 
                     if target not in instance_names:
-                        print('Connection "{}"" contains non-existent target "{}"'.format(conn_name, target))
+                        print(
+                            'Connection "{}"" contains non-existent target "{}"'.format(conn_name, target))
                         flag = True
 
                     if args.fix and flag:
@@ -165,7 +173,8 @@ def lint_main(args=None, parser=None):
 
                 if args.fix:
                     # TODO: Save backup, also fix pretty-print problems
-                    top_tree.write(xml_file, xml_declaration=True, encoding='UTF-8', pretty_print=True)
+                    top_tree.write(xml_file, xml_declaration=True,
+                                   encoding='UTF-8', pretty_print=True)
 
         else:
             print('The file type \'{}\' is not supported.'.format(file_extension))

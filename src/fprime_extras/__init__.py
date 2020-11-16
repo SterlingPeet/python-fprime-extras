@@ -1,7 +1,7 @@
 try:
     from .version import __version__
-    from .version import __branch__
-except:
+    from .version import __branch__  # noqa: F401
+except Exception:
     __version__ = 'v0.0.0'
 
 __author__ = 'Sterling Peet'

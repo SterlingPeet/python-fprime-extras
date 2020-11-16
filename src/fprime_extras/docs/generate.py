@@ -2,7 +2,8 @@ import lxml.etree as etree
 from lxml.etree import XMLSyntaxError
 from ..core.file import ExtrasFile
 from ..docs.parse import parse_port_list, parse_event_list, parse_telemetry_list,\
-                        parse_command_list, parse_components_file, parse_parameter_list
+    parse_command_list, parse_components_file
+
 
 def generate_topology_documentation(file_name, fprime_root):
     xml_file = ExtrasFile(file_name)
@@ -33,7 +34,8 @@ def generate_topology_documentation(file_name, fprime_root):
     events = []
     commands = []
     for component in imported_components:
-        port_list, command_list, telemetry_list, event_list, comp_root = parse_components_file(component)
+        port_list, command_list, telemetry_list, event_list, comp_root = parse_components_file(
+            component)
         if comp_root.tag == "component" and "name" in comp_root.attrib.keys():
             component_name = comp_root.attrib["name"]
             component_names.append(component_name)
@@ -53,17 +55,21 @@ def generate_topology_documentation(file_name, fprime_root):
 
         print('\r\n\r\n## Command List\r\n')
         delimiter = '|'
-        print(delimiter + delimiter.join([' ' + cmd_titles[t] + ' ' for t in cmd_keys]) + delimiter)
-        print(delimiter + delimiter.join([' --- ' for t in cmd_keys]) + delimiter)
+        print(
+            delimiter + delimiter.join([' ' + cmd_titles[t] + ' ' for t in cmd_keys]) + delimiter)
+        print(delimiter +
+              delimiter.join([' --- ' for t in cmd_keys]) + delimiter)
         for component_name, command_list in zip(component_names, commands):
             for cmd_dict in command_list:
                 cmd_dict["Component"] = component_name
-                print(delimiter + delimiter.join([' ' + cmd_dict[i] + ' ' for i in cmd_keys]) + delimiter)
+                print(
+                    delimiter + delimiter.join([' ' + cmd_dict[i] + ' ' for i in cmd_keys]) + delimiter)
     else:
         print('\r\n\r\n## Command List\r\n\r\nThis deployment has no commands.')
 
     # Lets build the telemetry list
-    telemetry_count = sum([len(telemetry_list) for telemetry_list in telemetry])
+    telemetry_count = sum([len(telemetry_list)
+                           for telemetry_list in telemetry])
     if telemetry_count > 0:
         _, channel_keys, channel_titles = parse_telemetry_list(None)
         channel_keys.append("Component")
@@ -71,12 +77,15 @@ def generate_topology_documentation(file_name, fprime_root):
 
         print('\r\n## Telemetry Channel List\r\n')
         delimiter = '|'
-        print(delimiter + delimiter.join([' ' + channel_titles[t] + ' ' for t in channel_keys]) + delimiter)
-        print(delimiter + delimiter.join([' --- ' for t in channel_keys]) + delimiter)
+        print(
+            delimiter + delimiter.join([' ' + channel_titles[t] + ' ' for t in channel_keys]) + delimiter)
+        print(delimiter +
+              delimiter.join([' --- ' for t in channel_keys]) + delimiter)
         for component_name, telemetry_list in zip(component_names, telemetry):
             for chan_dict in telemetry_list:
                 chan_dict["Component"] = component_name
-                print(delimiter + delimiter.join([' ' + chan_dict[i] + ' ' for i in channel_keys]) + delimiter)
+                print(
+                    delimiter + delimiter.join([' ' + chan_dict[i] + ' ' for i in channel_keys]) + delimiter)
     else:
         print('\r\n## Telemetry Channel List\r\n\r\nThis deployment has no telemetry.')
 
@@ -89,12 +98,15 @@ def generate_topology_documentation(file_name, fprime_root):
 
         print('\r\n## Event List\r\n')
         delimiter = '|'
-        print(delimiter + delimiter.join([' ' + event_titles[t] + ' ' for t in event_keys]) + delimiter)
-        print(delimiter + delimiter.join([' --- ' for t in event_keys]) + delimiter)
+        print(
+            delimiter + delimiter.join([' ' + event_titles[t] + ' ' for t in event_keys]) + delimiter)
+        print(delimiter +
+              delimiter.join([' --- ' for t in event_keys]) + delimiter)
         for component_name, event_list in zip(component_names, events):
             for event_dict in event_list:
                 event_dict["Component"] = component_name
-                print(delimiter + delimiter.join([' ' + event_dict[i] + ' ' for i in event_keys]) + delimiter)
+                print(
+                    delimiter + delimiter.join([' ' + event_dict[i] + ' ' for i in event_keys]) + delimiter)
     else:
         print('\r\n## Event List\r\n\r\nThis deployment has no events.')
 
@@ -109,18 +121,23 @@ def generate_topology_documentation(file_name, fprime_root):
 
         print('\r\n\r\n## Port List\r\n')
         delimiter = '|'
-        print(delimiter + delimiter.join([' ' + port_titles[p] + ' ' for p in port_keys]) + delimiter)
-        print(delimiter + delimiter.join([' --- ' for p in port_keys]) + delimiter)
+        print(
+            delimiter + delimiter.join([' ' + port_titles[p] + ' ' for p in port_keys]) + delimiter)
+        print(delimiter +
+              delimiter.join([' --- ' for p in port_keys]) + delimiter)
         for component_name, port_list in zip(component_names, ports):
             for port_dict in port_list:
                 port_dict["Component"] = component_name
-                print(delimiter + delimiter.join([' ' + port_dict[i] + ' ' for i in port_keys]) + delimiter)
+                print(
+                    delimiter + delimiter.join([' ' + port_dict[i] + ' ' for i in port_keys]) + delimiter)
     else:
         print('\r\n\r\n## Port List\r\n\r\nThis deployment has no commands.')
     print('\r\n')
 
+
 def generate_component_documentation(file_name):
-    port_list, command_list, telemetry_list, event_list, comp_root = parse_components_file(file_name)
+    port_list, command_list, telemetry_list, event_list, comp_root = parse_components_file(
+        file_name)
 
     for child in comp_root:
         if child.tag == 'ports':
@@ -140,10 +157,13 @@ def generate_component_documentation(file_name):
 
         print('\r\n\r\n## Command List\r\n')
         delimiter = '|'
-        print(delimiter + delimiter.join([' ' + cmd_titles[t] + ' ' for t in cmd_keys]) + delimiter)
-        print(delimiter + delimiter.join([' --- ' for t in cmd_keys]) + delimiter)
+        print(
+            delimiter + delimiter.join([' ' + cmd_titles[t] + ' ' for t in cmd_keys]) + delimiter)
+        print(delimiter +
+              delimiter.join([' --- ' for t in cmd_keys]) + delimiter)
         for cmd_dict in command_list:
-            print(delimiter + delimiter.join([' ' + cmd_dict[i] + ' ' for i in cmd_keys]) + delimiter)
+            print(
+                delimiter + delimiter.join([' ' + cmd_dict[i] + ' ' for i in cmd_keys]) + delimiter)
     else:
         print('\r\n\r\n## Command List\r\n\r\nThis component has no commands.')
 
@@ -152,10 +172,13 @@ def generate_component_documentation(file_name):
 
         print('\r\n## Telemetry Channel List\r\n')
         delimiter = '|'
-        print(delimiter + delimiter.join([' ' + channel_titles[t] + ' ' for t in channel_keys]) + delimiter)
-        print(delimiter + delimiter.join([' --- ' for t in channel_keys]) + delimiter)
+        print(
+            delimiter + delimiter.join([' ' + channel_titles[t] + ' ' for t in channel_keys]) + delimiter)
+        print(delimiter +
+              delimiter.join([' --- ' for t in channel_keys]) + delimiter)
         for chan_dict in telemetry_list:
-            print(delimiter + delimiter.join([' ' + chan_dict[i] + ' ' for i in channel_keys]) + delimiter)
+            print(
+                delimiter + delimiter.join([' ' + chan_dict[i] + ' ' for i in channel_keys]) + delimiter)
     else:
         print('\r\n## Telemetry Channel List\r\n\r\nThis component has no telemetry.')
 
@@ -164,10 +187,13 @@ def generate_component_documentation(file_name):
 
         print('\r\n## Event List\r\n')
         delimiter = '|'
-        print(delimiter + delimiter.join([' ' + event_titles[t] + ' ' for t in event_keys]) + delimiter)
-        print(delimiter + delimiter.join([' --- ' for t in event_keys]) + delimiter)
+        print(
+            delimiter + delimiter.join([' ' + event_titles[t] + ' ' for t in event_keys]) + delimiter)
+        print(delimiter +
+              delimiter.join([' --- ' for t in event_keys]) + delimiter)
         for event_dict in event_list:
-            print(delimiter + delimiter.join([' ' + event_dict[i] + ' ' for i in event_keys]) + delimiter)
+            print(
+                delimiter + delimiter.join([' ' + event_dict[i] + ' ' for i in event_keys]) + delimiter)
     else:
         print('\r\n## Event List\r\n\r\nThis component has no events.')
 
@@ -179,10 +205,13 @@ def generate_component_documentation(file_name):
 
         print('\r\n\r\n## Port List\r\n')
         delimiter = '|'
-        print(delimiter + delimiter.join([' ' + port_titles[p] + ' ' for p in port_keys]) + delimiter)
-        print(delimiter + delimiter.join([' --- ' for p in port_keys]) + delimiter)
+        print(
+            delimiter + delimiter.join([' ' + port_titles[p] + ' ' for p in port_keys]) + delimiter)
+        print(delimiter +
+              delimiter.join([' --- ' for p in port_keys]) + delimiter)
         for port_dict in port_list:
-            print(delimiter + delimiter.join([' ' + port_dict[i] + ' ' for i in port_keys]) + delimiter)
+            print(
+                delimiter + delimiter.join([' ' + port_dict[i] + ' ' for i in port_keys]) + delimiter)
     else:
         print('\r\n\r\n## Port List\r\n\r\nThis component has no commands.')
     print('\r\n')

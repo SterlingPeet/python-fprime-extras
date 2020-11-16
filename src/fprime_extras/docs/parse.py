@@ -2,6 +2,7 @@ import lxml.etree as etree
 from lxml.etree import XMLSyntaxError
 from ..core.file import ExtrasFile
 
+
 def parse_components_file(file_name):
     xml_file = ExtrasFile(file_name)
     xml_tree = None
@@ -64,9 +65,11 @@ def parse_port_list(ports_root):
                             port_dict['kind'] = 'Output'
                         else:
                             port_dict['direction'] = 'Input'
-                            port_dict['kind'] = port.get(key)[0:-6].capitalize()
+                            port_dict['kind'] = port.get(
+                                key)[0:-6].capitalize()
                     if key == 'data_type':
-                        port_dict['data_type'] = '[`{}`]()'.format(port.get(key))
+                        port_dict['data_type'] = '[`{}`]()'.format(
+                            port.get(key))
                 port_list.append(port_dict)
     return port_list, port_keys, port_titles
 
@@ -94,7 +97,8 @@ def parse_command_list(commands_root):
                             if child.tag == key:
                                 cmd_dict[key] = child.text.strip()
                     if key == 'opcode':
-                        cmd_dict[key] = '{val} (0x{val:X})'.format(val=int(command.get(key)))
+                        cmd_dict[key] = '{val} (0x{val:X})'.format(
+                            val=int(command.get(key)))
                 cmd_list.append(cmd_dict)
     return cmd_list, cmd_keys, cmd_titles
 
@@ -120,7 +124,8 @@ def parse_telemetry_list(telemetry_root):
                             if child.tag == key:
                                 chan_dict[key] = child.text.strip()
                     if key == 'id':
-                        chan_dict[key] = '{val} (0x{val:X})'.format(val=int(channel.get(key)))
+                        chan_dict[key] = '{val} (0x{val:X})'.format(
+                            val=int(channel.get(key)))
                 channel_list.append(chan_dict)
     return channel_list, channel_keys, channel_titles
 
@@ -149,7 +154,8 @@ def parse_event_list(events_root):
                             if child.tag == key:
                                 event_dict[key] = child.text.strip()
                     if key == 'id':
-                        event_dict[key] = '{val} (0x{val:X})'.format(val = int(event.get(key)))
+                        event_dict[key] = '{val} (0x{val:X})'.format(
+                            val=int(event.get(key)))
                 event_list.append(event_dict)
     return event_list, event_keys, event_titles
 

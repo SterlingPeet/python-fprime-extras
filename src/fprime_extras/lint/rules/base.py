@@ -23,4 +23,3 @@ class AbstractRule(metaclass=ABCMeta):
     # @abstractmethod
     # def fixable(self, fixable):
     #     self.__fixable = fixable
-

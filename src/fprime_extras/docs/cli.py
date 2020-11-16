@@ -5,7 +5,9 @@ from ..docs import generate
 from ..docs import TopologyGrapher
 
 
-parser = argparse.ArgumentParser(description='The missing docs generator for F Prime projects.')
+parser = argparse.ArgumentParser(
+    description='The missing docs generator for F Prime projects.')
+
 
 def build_parser(parser):
     """Builds the parser for the docs cli.  Formulating this as a
@@ -15,7 +17,7 @@ def build_parser(parser):
     parser.add_argument('base_file', metavar='FILE',
                         help='File to use for docs source')
     parser.add_argument('fprime_root', type=str, nargs='?',
-                         help='FPrime root directory for topology parsing')
+                        help='FPrime root directory for topology parsing')
     parser.add_argument('-o', '--output', dest="output",
                         help='Documentation file to generate')
     parser.add_argument('-g', '--graph', action='store_true',
@@ -59,7 +61,6 @@ def docs_main(args=None, parser=None):
     if invalid_flag:
         exit(-1)
 
-
     print('Loading file {}'.format(args.base_file))
     # Ignore the rest of this file, its a hack, and probably needs
     # to be removed since it was written to auto-code files that are
@@ -68,6 +69,7 @@ def docs_main(args=None, parser=None):
     if ai_file_type == "Component":
         generate.generate_component_documentation(args.base_file)
     elif ai_file_type == "TopologyApp" and not args.graph:
-        generate.generate_topology_documentation(args.base_file, args.fprime_root)
+        generate.generate_topology_documentation(
+            args.base_file, args.fprime_root)
     elif ai_file_type == "TopologyApp" and args.graph:
         TopologyGrapher.make_graph(args.base_file, output_file)

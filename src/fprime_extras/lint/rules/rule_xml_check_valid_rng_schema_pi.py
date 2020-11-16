@@ -13,7 +13,7 @@ class RuleXmlCheckValidRelaxNGSchemaPI(AbstractRule):
 
     @property
     def fixable(self):
-        for tag in cls.__tags:
+        for tag in RuleXmlCheckValidRelaxNGSchemaPI.__tags:
             if tag == 'fixable':
                 return True
         return False

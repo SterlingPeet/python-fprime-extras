@@ -2,6 +2,7 @@ import functools
 
 from .base import AbstractRule
 
+
 class RuleListFactory:
     """Class for building a rule list to run against a model."""
 
@@ -21,7 +22,8 @@ class RuleListFactory:
             #     # logger.warning('Executor %s already exists. Will replace it', name)
             #     print('Rule is already in the registry, replacing with new implementation'.format(rule_number))
             if wrapped_class in cls.registry:
-                print("This rule: {} already registered.".format(wrapped_class.__name__))
+                print("This rule: {} already registered.".format(
+                    wrapped_class.__name__))
             cls.registry.append(wrapped_class)
             # print("Registered {}.".format(wrapped_class.__name__))
             # print("Length of registry: {}".format(len(cls.registry)))
@@ -32,7 +34,7 @@ class RuleListFactory:
         return inner_wrapper
 
     @classmethod
-    def rules(cls, tags: list=[]) -> list:
+    def rules(cls, tags: list = []) -> list:
         """ Factory command to create a list of rules.
         This method filters the registry of rules for rules with tagas
         matching the list provided.  An empty list will yield the entire
@@ -46,7 +48,7 @@ class RuleListFactory:
         for rule in cls.registry:
             flag = True
             for tag in tags:
-                if tag not in rules.tags:
+                if tag not in rule.tags:
                     flag = False
             if flag:
                 rule_list.append(rule)

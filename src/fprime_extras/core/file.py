@@ -4,13 +4,16 @@ from os import path
 from os.path import abspath
 from os.path import join as join_dir
 
+
 class ExtrasFile(object):
     """File manager for fprime extras file interactions."""
+
     def __init__(self, filename=None):
         super(ExtrasFile, self).__init__()
         self.filename = filename
         self.full_filename = abspath(filename)
-        self.backup_filename = sep.join([path.dirname(self.full_filename), '.{}.{}'.format(path.basename(self.full_filename), '0.bak')])
+        self.backup_filename = sep.join([path.dirname(self.full_filename), '.{}.{}'.format(
+            path.basename(self.full_filename), '0.bak')])
         self._loaded = False
         self._orig_contents = None
         self._orig_contents_lines = None
@@ -51,7 +54,8 @@ class ExtrasFile(object):
     def load_file_contents(self):
         with open(self.filename, 'rb') as f:
             self._orig_contents = f.read()
-            self._orig_contents_lines = self._orig_contents.split(bytearray(linesep, 'utf-8'))
+            self._orig_contents_lines = self._orig_contents.split(
+                bytearray(linesep, 'utf-8'))
             self._loaded = True
 
     def _write_backup(self):

@@ -15,14 +15,12 @@ Why does this file exist, and why not put this in __main__?
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
 import argparse
-import lxml.etree as etree
 import textwrap
 
 from . import __date__
 from . import __version__
 from . import __branch__
 from .devupdate import nag, version_cache_file
-from .core.file import ExtrasFile
 from .docs.cli import build_parser as build_docs_parser
 from .docs.cli import docs_main
 from .lint.cli import build_parser as build_lint_parser
@@ -44,6 +42,7 @@ def build_common_parser(parser):
     parser.add_argument('--print-cache-file-contents', action='store_true',
                         help='Print the contents of the version cache file')
 
+
 parser = argparse.ArgumentParser(
     description=textwrap.dedent('''\
     %(prog)s : The missing F Prime development tool set.
@@ -57,9 +56,12 @@ parser = argparse.ArgumentParser(
     Atlanta, GA, USA'''))
 build_common_parser(parser)
 subparsers = parser.add_subparsers(title='Extras Command List')
-docs_parser = subparsers.add_parser('docs', help='Documentation file template generator and updater')
-impl_parser = subparsers.add_parser('impl', help='Implementation file template generator and updater')
-lint_parser = subparsers.add_parser('lint', help='Lint checker for F Prime format and structure')
+docs_parser = subparsers.add_parser(
+    'docs', help='Documentation file template generator and updater')
+impl_parser = subparsers.add_parser(
+    'impl', help='Implementation file template generator and updater')
+lint_parser = subparsers.add_parser(
+    'lint', help='Lint checker for F Prime format and structure')
 build_docs_parser(docs_parser)
 docs_parser.set_defaults(func=docs_main)
 build_lint_parser(lint_parser)

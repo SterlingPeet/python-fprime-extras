@@ -15,11 +15,12 @@ cluster_ID = 1
 
 # tutorial at: https://docs.python.org/3/library/xml.etree.elementtree.html
 
+
 def find_unique_port_ID(component_name, port_name, component_port_mapping):
     """
     returns the ID of the port, or -1 if it is not found on the component
     """
-    id = 1;
+    id = 1
     for component in component_port_mapping:
         if component_name == component:
             for port in component_port_mapping[component]:
@@ -39,7 +40,7 @@ def make_component_string(component_name, port_names_list):
     global cluster_ID
     cluster_ID += 1
 
-    #00,48, 87  <- decimal
+    # 00,48, 87  <- decimal
     num_out = len(port_names_list)
     """
     can uncomment this to customize color scheme for component nodes
@@ -49,7 +50,8 @@ def make_component_string(component_name, port_names_list):
     gray = 100 + min(100, 10 * num_out)
     color_string = '#{:02X}{:02X}{:02X}'.format(gray, gray, gray)
 
-    component_string = "\t\tnode [color=\"{color_string}\" style=\"filled\"]; {component_name};\n".format(color_string=color_string, component_name=component_name)
+    component_string = "\t\tnode [color=\"{color_string}\" style=\"filled\"]; {component_name};\n".format(
+        color_string=color_string, component_name=component_name)
     return component_string
 
 
@@ -59,7 +61,8 @@ def make_port_string(port_name):
     """
     global port_ID
     print("PortName: {}".format(port_name))
-    port_string = "\t\tnode [shape=circle label=\"{port_name}\"]; Port{port_id};\n".format(port_name=port_name, port_id=port_ID)
+    port_string = "\t\tnode [shape=circle label=\"{port_name}\"]; Port{port_id};\n".format(
+        port_name=port_name, port_id=port_ID)
     port_ID += 1
     return port_string
 
@@ -67,7 +70,8 @@ def make_port_string(port_name):
 def make_graph(source_file_name, target_file_name):
     # parse XML
     components_ports = {}  # maps components to ports that they contain
-    ports_connections_ports = {}  # maps components -> connection names -> tuple<port, port>
+    # maps components -> connection names -> tuple<port, port>
+    ports_connections_ports = {}
     tree = ET.parse(source_file_name)
     root = tree.getroot()
 
@@ -79,7 +83,7 @@ def make_graph(source_file_name, target_file_name):
 
     # get port connections
     print("\nConnections: ")
-    for connection in root.findall(connection_tag) :
+    for connection in root.findall(connection_tag):
         connection_name = connection.attrib[name_tag]
         target = connection.find("./{}".format(target_tag))
         source = connection.find("./{}".format(source_tag))
@@ -87,7 +91,8 @@ def make_graph(source_file_name, target_file_name):
         source_component = source.attrib[component_tag]
         target_port = target.attrib[port_tag]
         source_port = source.attrib[port_tag]
-        print("source: {}, target: {}, name: {}".format(source_component, target_component, connection_name))
+        print("source: {}, target: {}, name: {}".format(
+            source_component, target_component, connection_name))
 
         source_component_port_pair = (source_component, source_port)
         target_component_port_pair = (target_component, target_port)
@@ -121,18 +126,21 @@ def make_graph(source_file_name, target_file_name):
         start_index = source_file_name.rfind("/")
     elif source_file_name.rfind("\\") >= 0:
         start_index = source_file_name.rfind("\\")
-    source_file_name_noending = source_file_name[start_index:source_file_name.rfind(".")]
+    source_file_name_noending = source_file_name[start_index:source_file_name.rfind(
+        ".")]
 
     all_ports = []
     for component in components_ports:
         all_ports.extend(components_ports[component])
 
     # write heading
-    output_file.write("digraph G {{ label=\"{}\"\n".format(source_file_name_noending))
+    output_file.write("digraph G {{ label=\"{}\"\n".format(
+        source_file_name_noending))
 
     # write subgraphs
     for component in components_ports:
-        output_file.write(make_component_string(component, components_ports[component]))
+        output_file.write(make_component_string(
+            component, components_ports[component]))
 
     output_file.write("\n")
     # write connections
@@ -144,15 +152,16 @@ def make_graph(source_file_name, target_file_name):
             target_component = target_port_info[0]
             target_port = target_port_info[1]
 
-            id1 = find_unique_port_ID(source_component, source_port, components_ports)
-            id2 = find_unique_port_ID(target_component, target_port, components_ports)
+            # id1 = find_unique_port_ID(
+            #     source_component, source_port, components_ports)
+            # id2 = find_unique_port_ID(
+            #     target_component, target_port, components_ports)
             output_file.write("\t{source_comp} -> {dest_comp}[label={connection_name} color=\"#646464;0.5:#C8C8C8\"];\n".format(
                 source_comp=source_component, dest_comp=target_component, connection_name=connection_name))
 
     # write closing curly brace
     output_file.write("}\n")
     output_file.close()
-
 
     # run graphViz
     output_image_file = target_file_name[:target_file_name.rfind(".")] + ".jpg"
@@ -170,6 +179,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 2:
         target_file_name = sys.argv[2]
         if target_file_name.rfind("."):
-            print("File must have a file extension. An image will be made with a .jpg extension")
+            print(
+                "File must have a file extension. An image will be made with a .jpg extension")
             exit(1)
     make_graph(source_file_name, target_file_name)

@@ -10,6 +10,7 @@ params = 'Accept: application/vnd.github.v3+json'
 cache_dir = AppDirs('fprime-extras', 'SterlingPeet').user_cache_dir
 version_cache_file = cache_dir + os.sep + 'version.json'
 
+
 def get_github_version(repository=repository, params=params, branch='main'):
     """Get the SHA of the latest commit in the specified branch on GH."""
     cache_expired = False
@@ -20,23 +21,25 @@ def get_github_version(repository=repository, params=params, branch='main'):
             version_dict = json.load(cache)
             # print("cached...")
             # print(version_dict)
-            t_delta = datetime.now() - datetime.fromisoformat(version_dict['timestamp'])
+            t_delta = datetime.now() - \
+                datetime.fromisoformat(version_dict['timestamp'])
             # print(t_delta)
             gh_sha = version_dict['sha']
             if t_delta > timedelta(hours=1):
                 # print("cache is expired, updating...")
                 cache_expired = True
-    except:
+    except Exception:
         cache_expired = True
 
     if cache_expired:
         version_dict = {'timestamp': datetime.now().isoformat()}
-        resp = requests.get(url='{}/branches/{}'.format(repository, branch), params=params)
+        resp = requests.get(
+            url='{}/branches/{}'.format(repository, branch), params=params)
         try:
             gh_sha = resp.json()['commit']['sha']
             version_dict['sha'] = gh_sha
             version_dict['status'] = 'Check Successful'
-        except:
+        except Exception:
             version_dict['sha'] = gh_sha
             version_dict['status'] = 'Bad HTTP Response: {}'.format(str(resp))
         # print(version_dict)
@@ -45,6 +48,7 @@ def get_github_version(repository=repository, params=params, branch='main'):
         with open(version_cache_file, 'w') as cache:
             json.dump(version_dict, cache)
     return gh_sha
+
 
 def check_version(sha, branch='main'):
     """Return False if the given SHA matches the latest commit on GH."""
@@ -56,6 +60,7 @@ def check_version(sha, branch='main'):
         print('*** been down at the last check.')
         # return False
     return sha != gh_sha[0:len(sha)]
+
 
 def nag(version, branch):
     """Ask to update, if this commit doesn't match github."""
