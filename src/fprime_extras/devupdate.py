@@ -66,7 +66,7 @@ def check_version(sha, branch='main'):
 def nag(version, branch):
     """Ask to update, if this commit doesn't match github."""
     try:
-        if check_version(version.split('-')[2][1:], branch):
+        if check_version(version.split('-')[1][1:], branch):
             print('***')
             print('*** Your version of this program is: {}'.format(version))
             print('*** This does not match the latest commit in the upstream')

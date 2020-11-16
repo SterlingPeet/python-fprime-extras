@@ -38,8 +38,8 @@ def get_version():
         except Exception:
             branch = subprocess.check_output(
                 ["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode("utf-8").strip()
-        version = version + '-' + \
-            branch.replace(' ', '_').replace(
+        version = version.split('-')[0] + '+' + '-'.join(version.split('-')[1:]) + \
+            '-' + branch.replace(' ', '_').replace(
                 '/', '_').replace('\\', '_').replace('-', '_')
         with open('src/fprime_extras/version.py', 'w') as f:
             f.write('__version__ = \'{}\'\r\n__branch__ = \'{}\'\r\n'.format(
