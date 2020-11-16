@@ -1,9 +1,8 @@
 import argparse
 from os.path import splitext
 
-from ..docs import generate
 from ..docs import TopologyGrapher
-
+from ..docs import generate
 
 parser = argparse.ArgumentParser(
     description='The missing docs generator for F Prime projects.')

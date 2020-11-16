@@ -1,6 +1,6 @@
 from os import linesep
-from os import sep
 from os import path
+from os import sep
 from os.path import abspath
 from os.path import join as join_dir
 

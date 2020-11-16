@@ -1,8 +1,12 @@
 import lxml.etree as etree
 from lxml.etree import XMLSyntaxError
+
 from ..core.file import ExtrasFile
-from ..docs.parse import parse_port_list, parse_event_list, parse_telemetry_list,\
-    parse_command_list, parse_components_file
+from ..docs.parse import parse_command_list
+from ..docs.parse import parse_components_file
+from ..docs.parse import parse_event_list
+from ..docs.parse import parse_port_list
+from ..docs.parse import parse_telemetry_list
 
 
 def generate_topology_documentation(file_name, fprime_root):

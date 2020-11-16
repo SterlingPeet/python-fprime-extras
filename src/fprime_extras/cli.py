@@ -17,10 +17,11 @@ Why does this file exist, and why not put this in __main__?
 import argparse
 import textwrap
 
+from . import __branch__
 from . import __date__
 from . import __version__
-from . import __branch__
-from .devupdate import nag, version_cache_file
+from .devupdate import nag
+from .devupdate import version_cache_file
 from .docs.cli import build_parser as build_docs_parser
 from .docs.cli import docs_main
 from .lint.cli import build_parser as build_lint_parser

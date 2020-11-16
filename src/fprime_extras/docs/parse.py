@@ -1,5 +1,6 @@
 import lxml.etree as etree
 from lxml.etree import XMLSyntaxError
+
 from ..core.file import ExtrasFile
 
 

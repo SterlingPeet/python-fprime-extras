@@ -1,6 +1,6 @@
 try:
-    from .version import __version__
     from .version import __branch__  # noqa: F401
+    from .version import __version__
 except Exception:
     __version__ = 'v0.0.0'
 

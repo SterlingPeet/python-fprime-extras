@@ -1,9 +1,10 @@
-from appdirs import AppDirs
+import json
+import os
 from datetime import datetime
 from datetime import timedelta
-import json
+
 import requests
-import os
+from appdirs import AppDirs
 
 repository = 'https://api.github.com/repos/SterlingPeet/python-fprime-extras'
 params = 'Accept: application/vnd.github.v3+json'

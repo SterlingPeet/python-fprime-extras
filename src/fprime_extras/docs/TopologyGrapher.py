@@ -1,6 +1,6 @@
-import xml.etree.ElementTree as ET
-import sys
 import subprocess
+import sys
+import xml.etree.ElementTree as ET
 
 instance_tag = "instance"
 connection_tag = "connection"

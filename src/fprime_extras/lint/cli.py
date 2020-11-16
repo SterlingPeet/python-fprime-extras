@@ -1,13 +1,14 @@
 import argparse
+import os
+from os.path import splitext
+
 import lxml.etree as etree
 from lxml.etree import DocumentInvalid
 from lxml.etree import XMLSyntaxError
-from os.path import splitext
-import os
 
-from .xml import normalize
 from ..core.file import ExtrasFile
 from .rules import RuleListFactory
+from .xml import normalize
 
 parser = argparse.ArgumentParser(
     description='The missing linter for F Prime projects.')

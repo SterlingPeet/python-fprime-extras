@@ -5,12 +5,12 @@ from __future__ import print_function
 
 import io
 import re
+import subprocess
 from glob import glob
 from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import splitext
-import subprocess
 
 from setuptools import find_packages
 from setuptools import setup

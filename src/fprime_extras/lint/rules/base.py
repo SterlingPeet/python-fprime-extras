@@ -1,6 +1,7 @@
 
 
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
+from abc import abstractmethod
 
 
 class AbstractRule(metaclass=ABCMeta):

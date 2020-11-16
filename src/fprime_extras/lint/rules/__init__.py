@@ -1,6 +1,5 @@
 import importlib
 import pkgutil
-
 import sys
 
 from .registry import RuleListFactory  # noqa: F401
