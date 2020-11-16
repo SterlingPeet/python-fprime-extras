@@ -89,6 +89,7 @@ setup(
     install_requires=[
         'appdirs',
         'requests',
+        'lxml',
     ],
     extras_require={
         # eg:
