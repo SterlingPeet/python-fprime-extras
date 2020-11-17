@@ -13,15 +13,10 @@ def build_parser(parser):
     function allows this cli to be built either as a standalone callable
     or as a subcommand in a collection of callables.
     """
-    parser.add_argument('base_file', metavar='FILE',
-                        help='File to use for docs source')
-    parser.add_argument('fprime_root', type=str, nargs='?',
-                        help='FPrime root directory for topology parsing')
     parser.add_argument('-o', '--output', dest="output",
                         help='Documentation file to generate')
     parser.add_argument('-g', '--graph', action='store_true',
                         help='Graph a topology file')
-    # TODO: add argument for fprime root location, for topology parsing
 
 
 def docs_main(args=None, parser=None):
