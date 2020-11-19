@@ -101,4 +101,5 @@ def main(args=None):
         nag(__version__, __branch__)
     except Exception as e:
         if args.verbose > 0:
+            print('\nPrinting Traceback due to requested verbosity:\n')
             raise e
