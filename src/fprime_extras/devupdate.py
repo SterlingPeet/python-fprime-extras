@@ -34,6 +34,9 @@ def get_github_version(repository=repository, params=params, branch='main'):
 
     if cache_expired:
         version_dict = {'timestamp': datetime.now().isoformat()}
+        version_dict['repository'] = repository
+        version_dict['branch'] = branch
+        version_dict['params'] = params
         resp = requests.get(
             url='{}/branches/{}'.format(repository, branch), params=params)
         try:
