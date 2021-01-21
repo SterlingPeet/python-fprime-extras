@@ -1,3 +1,4 @@
+import logging as _logging
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
@@ -12,6 +13,8 @@ name_tag = "name"
 
 port_ID = 1
 cluster_ID = 1
+
+_log = _logging.getLogger(__name__)
 
 # tutorial at: https://docs.python.org/3/library/xml.etree.elementtree.html
 
@@ -60,7 +63,7 @@ def make_port_string(port_name):
     IDK what this does
     """
     global port_ID
-    print("PortName: {}".format(port_name))
+    _log.info("PortName: {}".format(port_name))
     port_string = "\t\tnode [shape=circle label=\"{port_name}\"]; Port{port_id};\n".format(
         port_name=port_name, port_id=port_ID)
     port_ID += 1
@@ -79,10 +82,10 @@ def make_graph(source_file_name, target_file_name):
     for instance in root.findall(instance_tag):
         name = instance.attrib[name_tag]
         components_ports[name] = []
-        print("Component Name: {}".format(name))
+        _log.info("Component Name: {}".format(name))
 
     # get port connections
-    print("\nConnections: ")
+    _log.info("\nConnections: ")
     for connection in root.findall(connection_tag):
         connection_name = connection.attrib[name_tag]
         target = connection.find("./{}".format(target_tag))
@@ -91,7 +94,7 @@ def make_graph(source_file_name, target_file_name):
         source_component = source.attrib[component_tag]
         target_port = target.attrib[port_tag]
         source_port = source.attrib[port_tag]
-        print("source: {}, target: {}, name: {}".format(
+        _log.info("source: {}, target: {}, name: {}".format(
             source_component, target_component, connection_name))
 
         source_component_port_pair = (source_component, source_port)
@@ -108,16 +111,16 @@ def make_graph(source_file_name, target_file_name):
             ports_connections_ports[source_component_port_pair] = {}
         ports_connections_ports[source_component_port_pair][connection_name] = target_component_port_pair
 
-    print("\nComponents and their ports:\n")
+    _log.info("\nComponents and their ports:\n")
     for component in components_ports:
-        print("\n{}".format(component))
+        _log.info("\n{}".format(component))
         for port in components_ports[component]:
-            print("\t{}".format(port))
+            _log.info("\t{}".format(port))
 
     num_connections = 0
     for port_info in ports_connections_ports:
         num_connections += len(ports_connections_ports[port_info])
-    print("Num Connections: {}".format(num_connections))
+    _log.info("Num Connections: {}".format(num_connections))
 
     # turn parsed XML into graphViz text
     output_file = open(target_file_name, 'w+')
@@ -172,14 +175,14 @@ if __name__ == '__main__':
     target_file_name = "graphviz.txt"
 
     if len(sys.argv) < 2:
-        print("Please specify a source file name.")
+        _log.error("Please specify a source file name.")
         exit(1)
 
     source_file_name = sys.argv[1]
     if len(sys.argv) > 2:
         target_file_name = sys.argv[2]
         if target_file_name.rfind("."):
-            print(
+            _log.error(
                 "File must have a file extension. An image will be made with a .jpg extension")
             exit(1)
     make_graph(source_file_name, target_file_name)

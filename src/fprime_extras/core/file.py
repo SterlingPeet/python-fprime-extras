@@ -32,7 +32,6 @@ class ExtrasFile(object):
             end = self._orig_contents_pos + size
             if end >= content_size:
                 end = content_size
-            # print("File len {}, pos {}, end {}, requested {}".format(content_size, self._orig_contents_pos, end, size))
             ret = self._orig_contents[self._orig_contents_pos:end]
             self._orig_contents_pos = end
         return ret
@@ -60,7 +59,6 @@ class ExtrasFile(object):
 
     def _write_backup(self):
         if not self._backup_flag:
-            # print(self.backup_filename)
             with open(self.backup_filename, 'wb') as f:
                 f.write(self._orig_contents)
                 self._backup_flag = True

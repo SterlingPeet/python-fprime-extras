@@ -81,6 +81,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Utilities',
@@ -96,8 +97,10 @@ setup(
     python_requires='>=3.5',
     install_requires=[
         'appdirs',
-        'requests',
         'lxml',
+        'requests',
+        'six',  # This is dragged in by Autocoder legacy code
+        'pyyaml',  # This was dragged in by fplint legacy code
     ],
     extras_require={
         # eg:
@@ -107,6 +110,7 @@ setup(
     entry_points={
         'console_scripts': [
             'fprime-extras = fprime_extras.cli:main',
+            'fplint-orig = fprime_extras.lint.migrations.main:main'
         ]
     },
 )

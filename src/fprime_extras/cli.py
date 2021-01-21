@@ -15,17 +15,26 @@ Why does this file exist, and why not put this in __main__?
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
 import argparse
+import logging
+import sys
 import textwrap
+from logging.handlers import TimedRotatingFileHandler
 
 from . import __branch__
 from . import __date__
 from . import __version__
+from .core.conf import log_file
+from .core.conf import log_file_format_str as log_frmat
+from .core.conf import log_levels
+from .core.util import ConsoleLoggingContext as ConsoleLog
 from .devupdate import nag
 from .devupdate import version_cache_file
 from .docs.cli import build_parser as build_docs_parser
 from .docs.cli import docs_main
 from .lint.cli import build_parser as build_lint_parser
 from .lint.cli import lint_main
+
+log = logging.getLogger(__name__)
 
 
 def build_base_parser(parser):
@@ -52,6 +61,8 @@ def build_common_parser(parser):
                         help='File to operate upon')
     parser.add_argument('fprime_root', metavar='FPRIME_ROOT', type=str, nargs='?',
                         help='FPrime root directory for dependency parsing')
+    parser.add_argument('--log-level', default='WARNING', choices=log_levels,
+                        help='log file verbosity level')
 
 
 parser = argparse.ArgumentParser(
@@ -69,8 +80,8 @@ build_base_parser(parser)
 subparsers = parser.add_subparsers(title='Extras Command List')
 docs_parser = subparsers.add_parser(
     'docs', help='Documentation file template generator and updater')
-impl_parser = subparsers.add_parser(
-    'impl', help='Implementation file template generator and updater')
+# impl_parser = subparsers.add_parser(
+#     'impl', help='Implementation file template generator and updater')
 lint_parser = subparsers.add_parser(
     'lint', help='Lint checker for F Prime format and structure')
 build_common_parser(docs_parser)
@@ -84,22 +95,31 @@ lint_parser.set_defaults(func=lint_main)
 def main(args=None):
     args = parser.parse_args(args=args)
 
-    if args.print_cache_file:
-        print('Version Check Cache File: {}'.format(version_cache_file))
+    console_handler = logging.StreamHandler(sys.stderr)
+    log.addHandler(console_handler)
+    formatter = logging.Formatter(log_frmat, datefmt='%Y-%m-%d %H:%M:%S')
+    file_handler = TimedRotatingFileHandler(log_file, when='midnight', backupCount=10)
+    file_handler.setFormatter(formatter)
+    root_log = logging.getLogger('')
+    root_log.addHandler(file_handler)
 
-    if args.print_cache_file_contents:
-        print('Version Check Cache File Contents:')
-        with open(version_cache_file, 'r') as f:
-            print(f.read())
+    with ConsoleLog(log, handler=console_handler):
+        if args.print_cache_file:
+            log.info('Version Check Cache File: {}'.format(version_cache_file))
+
+        if args.print_cache_file_contents:
+            log.info('Version Check Cache File Contents:')
+            with open(version_cache_file, 'r') as f:
+                log.info(f.read())
 
     if hasattr(args, 'func'):
         args.func(parser=args)
     else:
-        print('No Sub-command was invoked, doing nothing.')
+        log.warning('No Sub-command was invoked, doing nothing.')
 
     try:
         nag(__version__, __branch__)
     except Exception as e:
         if args.verbose > 0:
-            print('\nPrinting Traceback due to requested verbosity:\n')
+            log.error('\nPrinting Traceback due to requested verbosity:\n')
             raise e

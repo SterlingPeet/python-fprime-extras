@@ -1,7 +1,11 @@
+import logging as _logging
+
 import lxml.etree as etree
 from lxml.etree import XMLSyntaxError
 
 from ..core.file import ExtrasFile
+
+_log = _logging.getLogger(__name__)
 
 
 def parse_components_file(file_name):
@@ -10,14 +14,14 @@ def parse_components_file(file_name):
     try:
         xml_tree = etree.parse(xml_file)
     except XMLSyntaxError as e:
-        print('\r\nXML Parsing Error:')
-        print(e)
-        exit(-1)
+        _log.error('\r\nXML Parsing Error:')
+        _log.error(e)
+        exit(1)
 
     comp_root = xml_tree.getroot()
     if comp_root.tag != 'component':
-        print('Component model root not found!')
-        exit(-1)
+        _log.error('Component model root not found!')
+        exit(1)
 
     ports = None
     commands = None
