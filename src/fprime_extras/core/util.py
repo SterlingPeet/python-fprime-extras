@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 
 class ConsoleLoggingContext:
@@ -29,3 +30,16 @@ class ConsoleLoggingContext:
             self.logger.removeHandler(self.handler)
         if self.handler and self.close:
             self.handler.close()
+
+
+def find_fprime(cwd: Path) -> Path:
+    """
+    Finds F prime by recursing parent to parent until a matching directory is found.
+    Returns None if no fprime root is found
+    """
+    needle = Path("cmake/FPrime.cmake")
+    path = cwd.resolve()
+    while path != path.parent:
+        if Path(path, needle).is_file():
+            return path
+        path = path.parent

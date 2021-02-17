@@ -13,7 +13,7 @@ port_kinds = ['output', 'sync_input', 'async_input', 'guarded_input']
 
 
 @RuleListRegistry.register()
-class RuleDanglingPortConnections(AbstractRule):
+class RuleValidPortKinds(AbstractRule):
     """Check if input XML file can be parsed."""
 
     def __init__(self):
