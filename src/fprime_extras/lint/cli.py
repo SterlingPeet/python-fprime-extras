@@ -172,6 +172,7 @@ def lint_main(args=None, parser=None):
         # lint_log.addHandler(console_handler)
         # formatter = logging.Formatter(log_frmat)
 
+        rv_list = []
         with ConsoleLog(lint_log):  # , handler=console_handler):
             lint_log.info('**************** %s', base_filepath)
             for item in notifications:
@@ -182,9 +183,17 @@ def lint_main(args=None, parser=None):
                 note_list.append('{} '.format(item.description))
                 note_list.append('[{}]'.format(item.severity.name))
                 lint_log.warning(''.join(note_list))
+                rv_lest.append(RuleViolationError(item.rule_slug,
+                                                  item.line_number,
+                                                  item.description))
 
             if len(notifications) == 0:
                 lint_log.info('All linting checks passed.')
+
+        if len(rv_list) > 0:
+            # TODO: raise a lint error exception?
+            sys.exit(-1)
+
 
             # if args.fix:
             #     top_tree.write(base_file, xml_declaration=True,
