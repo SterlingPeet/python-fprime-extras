@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 slug = 'check-rng-schema'
 
 
-@RuleListRegistry.register()
+# @RuleListRegistry.register()
 class RuleXmlCheckValidRelaxNGSchemaPI(AbstractRule):
     """Check if input XML file can be parsed."""
 
