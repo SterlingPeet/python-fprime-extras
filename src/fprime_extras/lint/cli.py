@@ -11,6 +11,7 @@ from ..core.conf import log_levels_dict as log_lvl
 from ..core.file import ExtrasFile
 from ..core.hooks import HookRegistry
 from ..core.util import ConsoleLoggingContext as ConsoleLog
+from .exceptions import RuleViolationError
 from .rules.base import LintSeverity
 from .rules.registry import RuleListRegistry
 from .xml import normalize
