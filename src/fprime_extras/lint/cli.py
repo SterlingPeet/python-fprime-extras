@@ -183,7 +183,7 @@ def lint_main(args=None, parser=None):
                 note_list.append('{} '.format(item.description))
                 note_list.append('[{}]'.format(item.severity.name))
                 lint_log.warning(''.join(note_list))
-                rv_lest.append(RuleViolationError(item.rule_slug,
+                rv_list.append(RuleViolationError(item.rule_slug,
                                                   item.line_number,
                                                   item.description))
 
