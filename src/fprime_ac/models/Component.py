@@ -18,11 +18,9 @@
 # Python standard modules
 #
 import logging
-from typing import List
 
-from .Port import Port
 #
-# Python extention modules and custom interfaces
+# Python extension modules and custom interfaces
 #
 
 #
@@ -108,7 +106,7 @@ class Component:
     def get_modeler(self):
         return self.__modeler
 
-    def get_ports(self) -> List[Port]:
+    def get_ports(self):
         return self.__port_obj_list
 
     def set_ports(self, ports):

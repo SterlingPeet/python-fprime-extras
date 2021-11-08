@@ -18,11 +18,9 @@
 # Python standard modules
 #
 import logging
-from typing import List
 
-from .Component import Component
 #
-# Python extention modules and custom interfaces
+# Python extension modules and custom interfaces
 #
 
 #
@@ -74,7 +72,7 @@ class Topology:
     def get_comment(self):
         return self.__comment
 
-    def get_comp_list(self) -> List[Component]:
+    def get_comp_list(self):
         return self.__comp_list
 
     def get_base_id_list(self):

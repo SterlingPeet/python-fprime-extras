@@ -35,7 +35,7 @@ from fprime_ac.utils.exceptions import (
 
 # from builtins import file
 #
-# Python extention modules and custom interfaces
+# Python extension modules and custom interfaces
 #
 #
 # Universal globals used within module go here.
@@ -45,7 +45,7 @@ from fprime_ac.utils.exceptions import (
 # Global logger init. below.
 PRINT = logging.getLogger("output")
 DEBUG = logging.getLogger("debug")
-ROOTDIR = os.path.join(os.path.dirname(__file__), "..")
+ROOTDIR = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 #
 class XmlTopologyParser:
     def __init__(self, xml_file=None):
@@ -77,6 +77,7 @@ class XmlTopologyParser:
 
         self.__prepend_instance_name = False  # Used to turn off prepending instance name in the situation where instance dicts are being generated and only one instance of an object is created
         element_tree = etree.parse(fd)
+        fd.close() #Close the file, which is only used for the parsing above
 
         # Validate against schema
         relax_file_handler = open(ROOTDIR + self.__config.get("schema", "assembly"))
@@ -233,7 +234,7 @@ class XmlTopologyParser:
         # For each instance determine if it is active or passive here...
         # Determine a maximum base id window required for each instance here
         PRINT.info(
-            "\nDetermining kind of component and maximum reqired ID's for component instances"
+            "\nDetermining kind of component and maximum required ID's for component instances"
         )
         for inst in self.get_instances():
             type = inst.get_type()
